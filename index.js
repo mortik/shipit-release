@@ -20,6 +20,7 @@ module.exports = function(shipit) {
   const config = {
     keepReleases: 5,
     deployTo: '',
+    dirToCopy: 'build',
     packageManager: 'yarn',
     packageManagerOptions: '',
     buildTask: 'build',
