@@ -13,10 +13,7 @@ function getDeployTime() {
   return new Date().toISOString().replace(/-|:|T/g, '').substring(0, 14)
 }
 
-module.exports = function(shipit) {
-  shipit.currentPath = path.join(shipit.config.deployTo, 'current')
-  shipit.releasesPath = path.join(shipit.config.deployTo, 'releases')
-
+function extendShipit(shipit) {
   const config = {
     keepReleases: 5,
     deployTo: '',
@@ -28,6 +25,11 @@ module.exports = function(shipit) {
   }
   Object.assign(shipit.config, config)
 
+  shipit.currentPath = path.join(shipit.config.deployTo, 'current')
+  shipit.releasesPath = path.join(shipit.config.deployTo, 'releases')
+}
+
+module.exports = function(shipit) {
   function logInfo(message) {
     shipit.log(`\n\x1b[32m----->\x1b[0m ${message}`)
   }
@@ -37,6 +39,8 @@ module.exports = function(shipit) {
   }
 
   shipit.task('setup', async () => {
+    extendShipit(shipit)
+
     logInfo('Creating deployTo directory')
     await shipit.remote(`mkdir -p ${shipit.config.deployTo}`)
 
@@ -45,6 +49,8 @@ module.exports = function(shipit) {
   })
 
   shipit.task('deploy', async () => {
+    extendShipit(shipit)
+
     const deployTime = getDeployTime()
     const deployPath = path.join(shipit.releasesPath, deployTime)
 
@@ -69,6 +75,8 @@ module.exports = function(shipit) {
   })
 
   shipit.task('rollback', async () => {
+    extendShipit(shipit)
+
     const current = getCurrentRelease(await shipit.remote(`readlink ${shipit.currentPath}`))
     if (!current) {
       logError('No Current Release - nothing to rollback')
