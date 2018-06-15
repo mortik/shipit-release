@@ -1,3 +1,3 @@
 # Shipit-Release 
 
-## A Plusgin for ShipitJS
+## A Plugin for ShipitJS
