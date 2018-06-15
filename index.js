@@ -58,11 +58,15 @@ module.exports = function(shipit) {
     await shipit.local(`${shipit.config.packageManager} install ${shipit.config.packageManagerOptions}`)
     await shipit.local(`${shipit.config.packageManager} run ${shipit.config.buildTask}`)
 
+    shipit.emit('build')
+
     logInfo(`Creating new Release directory "${deployTime}"`)
     await shipit.remote(`mkdir -p ${deployPath}`)
 
     logInfo('Uploading new Release')
     await shipit.copyToRemote(`${shipit.config.dirToCopy}/`, `${deployPath}/`)
+
+    shipit.emit('uploaded')
 
     logInfo('Updating current Symlink')
     await shipit.remote(`ln -nfs ${deployPath} ${shipit.currentPath}`)
@@ -70,6 +74,8 @@ module.exports = function(shipit) {
     logInfo(`Keeping "${shipit.config.keepReleases}" last releases, cleaning others`)
     const command = `(ls -rd ${shipit.releasesPath}/*|head -n ${shipit.config.keepReleases};ls -d ${shipit.releasesPath}/*)|sort|uniq -u|xargs rm -rf`
     await shipit.remote(command)
+
+    shipit.emit('finished')
 
     return logInfo(`Done. Deployed version ${deployTime}`)
   })
