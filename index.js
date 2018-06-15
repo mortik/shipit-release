@@ -1,4 +1,4 @@
-import path from 'path2/posix'
+const path = require('path2/posix')
 
 function getCurrentRelease(result) {
   return result.map(item => item.stdout.replace(/\n$/, '').split('/').pop())[0]
