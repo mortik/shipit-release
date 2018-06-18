@@ -52,32 +52,48 @@ module.exports = function(shipit) {
   shipit.task('deploy', async () => {
     extendShipit(shipit)
 
-    const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
+    await shipit.start('install')
+    shipit.emit('build')
 
+    await shipit.start('upload')
+    shipit.emit('uploaded')
+
+    await shipit.start('symlink')
+    shipit.emit('symlink')
+
+    await shipit.start('cleanup')
+    shipit.emit('finished')
+
+    return shipit.logInfo(`Done. Deployed version ${shipit.deployTime}`)
+  })
+
+  shipit.blTask('install', async () => {
     shipit.logInfo('Installing deps & Building')
     await shipit.local(shipit.config.installCommand)
-    await shipit.local(shipit.config.buildCommand)
+    return shipit.local(shipit.config.buildCommand)
+  })
 
-    shipit.emit('build')
+  shipit.blTask('upload', async () => {
+    const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
 
     shipit.logInfo(`Creating new Release directory "${shipit.deployTime}"`)
     await shipit.remote(`mkdir -p ${deployPath}`)
 
     shipit.logInfo('Uploading new Release')
-    await shipit.copyToRemote(`${shipit.config.dirToCopy}/`, `${deployPath}/`)
+    return shipit.copyToRemote(`${shipit.config.dirToCopy}/`, `${deployPath}/`)
+  })
 
-    shipit.emit('uploaded')
+  shipit.blTask('symlink', async () => {
+    const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
 
     shipit.logInfo('Updating current Symlink')
-    await shipit.remote(`ln -nfs ${deployPath} ${shipit.currentPath}`)
+    return shipit.remote(`ln -nfs ${deployPath} ${shipit.currentPath}`)
+  })
 
+  shipit.blTask('cleanup', async () => {
     shipit.logInfo(`Keeping "${shipit.config.keepReleases}" last releases, cleaning others`)
     const command = `(ls -rd ${shipit.releasesPath}/*|head -n ${shipit.config.keepReleases};ls -d ${shipit.releasesPath}/*)|sort|uniq -u|xargs rm -rf`
-    await shipit.remote(command)
-
-    shipit.emit('finished')
-
-    return shipit.logInfo(`Done. Deployed version ${shipit.deployTime}`)
+    return shipit.remote(command)
   })
 
   shipit.task('rollback', async () => {
