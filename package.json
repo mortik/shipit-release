@@ -20,6 +20,7 @@
     "eslint-plugin-import": "2.12.0"
   },
   "dependencies": {
-    "path2": "^0.1.0"
+    "path2": "^0.1.0",
+    "shipit-utils": "^1.4.0"
   }
 }

@@ -86,6 +86,7 @@ yarn add --dev shipit-release
 - Basic Test Setup
 - Basic Test Coverage
 - Setup Contribution Guidelines
+- Cleanup index.js
 
 ## License
 

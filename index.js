@@ -1,4 +1,5 @@
 const path = require('path2/posix')
+const utils = require('shipit-utils')
 
 function getCurrentRelease(result) {
   return result.map(item => item.stdout.replace(/\n$/, '').split('/').pop())[0]
@@ -46,54 +47,68 @@ module.exports = function(shipit) {
     await shipit.remote(`mkdir -p ${shipit.config.deployTo}`)
 
     shipit.logInfo('Creating releases directory')
-    return shipit.remote(`mkdir -p ${shipit.releasesPath}`)
+    await shipit.remote(`mkdir -p ${shipit.releasesPath}`)
+
+    return shipit.emit('setup')
   })
 
-  shipit.task('deploy', async () => {
+  utils.registerTask(shipit, 'deploy', [
+    'deploy:install',
+    'deploy:upload',
+    'deploy:symlink',
+    'deploy:cleanup',
+    'deploy:finish',
+  ])
+
+  shipit.task('deploy:finish', () => {
     extendShipit(shipit)
 
-    await shipit.start('install')
-    shipit.emit('build')
-
-    await shipit.start('upload')
-    shipit.emit('uploaded')
-
-    await shipit.start('symlink')
-    shipit.emit('symlink')
-
-    await shipit.start('cleanup')
+    shipit.logInfo(`Done. Deployed version ${shipit.deployTime}`)
     shipit.emit('finished')
-
-    return shipit.logInfo(`Done. Deployed version ${shipit.deployTime}`)
   })
 
-  shipit.blTask('install', async () => {
+  shipit.blTask('deploy:install', async () => {
+    extendShipit(shipit)
+
     shipit.logInfo('Installing deps & Building')
     await shipit.local(shipit.config.installCommand)
-    return shipit.local(shipit.config.buildCommand)
+    await shipit.local(shipit.config.buildCommand)
+
+    shipit.emit('build')
   })
 
-  shipit.blTask('upload', async () => {
+  shipit.blTask('deploy:upload', async () => {
+    extendShipit(shipit)
+
     const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
 
     shipit.logInfo(`Creating new Release directory "${shipit.deployTime}"`)
     await shipit.remote(`mkdir -p ${deployPath}`)
 
     shipit.logInfo('Uploading new Release')
-    return shipit.copyToRemote(`${shipit.config.dirToCopy}/`, `${deployPath}/`)
+    await shipit.copyToRemote(`${shipit.config.dirToCopy}/`, `${deployPath}/`)
+
+    shipit.emit('uploaded')
   })
 
-  shipit.blTask('symlink', async () => {
+  shipit.blTask('deploy:symlink', async () => {
+    extendShipit(shipit)
+
     const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
 
     shipit.logInfo('Updating current Symlink')
-    return shipit.remote(`ln -nfs ${deployPath} ${shipit.currentPath}`)
+    await shipit.remote(`ln -nfs ${deployPath} ${shipit.currentPath}`)
+
+    shipit.emit('symlink')
   })
 
-  shipit.blTask('cleanup', async () => {
+  shipit.blTask('deploy:cleanup', async () => {
+    extendShipit(shipit)
+
     shipit.logInfo(`Keeping "${shipit.config.keepReleases}" last releases, cleaning others`)
+
     const command = `(ls -rd ${shipit.releasesPath}/*|head -n ${shipit.config.keepReleases};ls -d ${shipit.releasesPath}/*)|sort|uniq -u|xargs rm -rf`
-    return shipit.remote(command)
+    await shipit.remote(command)
   })
 
   shipit.task('rollback', async () => {
