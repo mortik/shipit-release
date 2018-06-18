@@ -18,17 +18,20 @@ function extendShipit(shipit) {
     keepReleases: 5,
     deployTo: '',
     dirToCopy: 'build',
-    packageManager: 'yarn',
-    packageManagerOptions: '',
-    buildTask: 'build',
+    installCommand: 'yarn install',
+    buildCommand: 'yarn run build',
     ...shipit.config,
   }
   Object.assign(shipit.config, config)
 
+  /* eslint-disable no-param-reassign */
   shipit.currentPath = path.join(shipit.config.deployTo, 'current')
   shipit.releasesPath = path.join(shipit.config.deployTo, 'releases')
+  shipit.deployTime = getDeployTime()
+  /* eslint-enable no-param-reassign */
 }
 
+/* eslint-disable func-names */
 module.exports = function(shipit) {
   function logInfo(message) {
     shipit.log(`\n\x1b[32m----->\x1b[0m ${message}`)
@@ -51,16 +54,15 @@ module.exports = function(shipit) {
   shipit.task('deploy', async () => {
     extendShipit(shipit)
 
-    const deployTime = getDeployTime()
-    const deployPath = path.join(shipit.releasesPath, deployTime)
+    const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
 
     logInfo('Installing deps & Building')
-    await shipit.local(`${shipit.config.packageManager} install ${shipit.config.packageManagerOptions}`)
-    await shipit.local(`${shipit.config.packageManager} run ${shipit.config.buildTask}`)
+    await shipit.local(shipit.config.installCommand)
+    await shipit.local(shipit.config.buildCommand)
 
     shipit.emit('build')
 
-    logInfo(`Creating new Release directory "${deployTime}"`)
+    logInfo(`Creating new Release directory "${shipit.deployTime}"`)
     await shipit.remote(`mkdir -p ${deployPath}`)
 
     logInfo('Uploading new Release')
@@ -77,7 +79,7 @@ module.exports = function(shipit) {
 
     shipit.emit('finished')
 
-    return logInfo(`Done. Deployed version ${deployTime}`)
+    return logInfo(`Done. Deployed version ${shipit.deployTime}`)
   })
 
   shipit.task('rollback', async () => {
@@ -103,3 +105,4 @@ module.exports = function(shipit) {
     return logInfo(`Done. Rolled back to version ${previousRelease}`)
   })
 }
+/* eslint-enable func-names */
