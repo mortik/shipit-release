@@ -1,6 +1,6 @@
 # Shipit-Release 
 
-A minimal PWA deployment Plugin for ShipitJS
+A minimal deployment Plugin for ShipitJS
 
 ## Usage
 
