@@ -28,7 +28,7 @@ function extendShipit(shipit) {
   /* eslint-disable no-param-reassign */
   shipit.currentPath = path.join(shipit.config.deployTo, 'current')
   shipit.releasesPath = path.join(shipit.config.deployTo, 'releases')
-  shipit.deployTime = getDeployTime()
+  shipit.deployTime = shipit.deployTime || getDeployTime()
   shipit.logInfo = function logInfo(message) {
     shipit.log(`\n\x1b[32m----->\x1b[0m ${message}`)
   }
