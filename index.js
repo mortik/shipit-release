@@ -54,27 +54,29 @@ module.exports = function(shipit) {
 
   utils.registerTask(shipit, 'deploy', [
     'deploy:install',
+    'deploy:build',
     'deploy:upload',
     'deploy:symlink',
     'deploy:cleanup',
     'deploy:finish',
   ])
 
-  shipit.task('deploy:finish', () => {
-    extendShipit(shipit)
-
-    shipit.logInfo(`Done. Deployed version ${shipit.deployTime}`)
-    shipit.emit('finished')
-  })
-
   shipit.blTask('deploy:install', async () => {
     extendShipit(shipit)
 
-    shipit.logInfo('Installing deps & Building')
+    shipit.logInfo('Installing deps')
     await shipit.local(shipit.config.installCommand)
+
+    shipit.emit('installed')
+  })
+
+  shipit.blTask('deploy:build', async () => {
+    extendShipit(shipit)
+
+    shipit.logInfo('Build App')
     await shipit.local(shipit.config.buildCommand)
 
-    shipit.emit('build')
+    shipit.emit('built')
   })
 
   shipit.blTask('deploy:upload', async () => {
@@ -99,7 +101,7 @@ module.exports = function(shipit) {
     shipit.logInfo('Updating current Symlink')
     await shipit.remote(`ln -nfs ${deployPath} ${shipit.currentPath}`)
 
-    shipit.emit('symlink')
+    shipit.emit('symlinked')
   })
 
   shipit.blTask('deploy:cleanup', async () => {
@@ -109,6 +111,14 @@ module.exports = function(shipit) {
 
     const command = `(ls -rd ${shipit.releasesPath}/*|head -n ${shipit.config.keepReleases};ls -d ${shipit.releasesPath}/*)|sort|uniq -u|xargs rm -rf`
     await shipit.remote(command)
+  })
+
+  shipit.task('deploy:finish', () => {
+    extendShipit(shipit)
+
+    shipit.emit('finished')
+
+    shipit.logInfo(`Done. Deployed version ${shipit.deployTime}`)
   })
 
   shipit.task('rollback', async () => {

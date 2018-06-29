@@ -69,6 +69,36 @@ To finish your Deployment it will remove the oldest Release to be in lign with t
 Run: ```shipit *your-server-env* rollback``` to rollback the latest Release.  
 This will also delete the Release Folder you are rolling back from.
 
+### Events
+
+You can run Tasks on specific steps of the deployment process.
+
+- installed -> when dependencies are installed.
+- built -> when buildCommand has been executed.
+- uploaded -> when dirToCopy has been uploaded.
+- symlinked -> after the current symlink has been updated.
+- finished -> after the deploy is finished.
+
+#### Example
+
+```javascript
+module.exports = (shipit) => {
+  require('shipit-release')(shipit)
+
+  shipit.initConfig({
+    ...
+  })
+
+  shipit.on('installed', async () => {
+    return shipit.start('doStuff')
+  })
+
+  shipit.blTask('doStuff', async () => {
+    // ... do stuff :)
+  })
+}
+```
+
 ## Installation
 
 Install the Package with your favorite Packagemanager:
