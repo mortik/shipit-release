@@ -15,8 +15,8 @@ module.exports = (shipit) => {
       deployTo: '/*your-deploy-dir*',
       keepReleases: 5,
       dirToCopy: 'build',
-      installCommand: 'yarn install',
-      buildCommand: 'yarn run build',
+      installCommand: 'npm install',
+      buildCommand: 'npm run build',
     },
     *your-server-env-1*: {
       servers: [{

@@ -19,8 +19,8 @@ function extendShipit(shipit) {
     keepReleases: 5,
     deployTo: '',
     dirToCopy: 'build',
-    installCommand: 'yarn install',
-    buildCommand: 'yarn run build',
+    installCommand: 'npm install',
+    buildCommand: 'npm run build',
     ...shipit.config,
   }
   Object.assign(shipit.config, config)
