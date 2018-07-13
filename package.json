@@ -1,6 +1,11 @@
 {
   "name": "shipit-release",
   "version": "1.2.2",
+  "homepage": "https://github.com/mortik/shipit-release#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mortik/shipit-release.git"
+  },
   "description": "Shipit Release Plugin",
   "main": "index.js",
   "scripts": {
