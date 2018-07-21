@@ -1,4 +1,4 @@
-# Shipit-Release 
+# Shipit-Release
 
 A minimal deployment Plugin for ShipitJS
 
@@ -48,36 +48,38 @@ Make sure you added at least one environment, for example ```staging``` to the c
   })
 ```
 
-As soon as you require the Plugin you have the following tasks avaiable:
+As soon as you require the plugin you have the following tasks available:
 
 ### Setup
 
-Run: ```shipit *your-server-env* setup``` to setup your deployment Directories on the Server.
-This will create your ```deployTo``` Folder as well as a ```releases``` Folder inside it.
+Run: ```shipit *your-server-env* setup``` to setup your deployment directories on the server.
+This will create your ```deployTo``` folder as well as a ```releases``` folder inside it.
 
 ### Deploy
 
-Run: ```shipit *your-server-env* deploy``` to build and deploy your PWA to the given Server Environment.  
-This will install the needed Dependencies with the configured ```installCommand``` and afterwards 
+Run: ```shipit *your-server-env* deploy``` to build and deploy your PWA to the given server environment.
+This will install the needed dependencies with the configured ```installCommand``` and afterwards
 build your PWA locally with the configured ```buildCommand```.
-If the build succeeds the Plugin will create a new Release Folder and sync your Files located in the 
-configured ```dirToCopy``` Folder and symlink it to the ```current``` Folder in your ```deployTo``` Directory.  
-To finish your Deployment it will remove the oldest Release to be in lign with the configured ```keepReleases``` Setting.
+If the build succeeds the plugin will create a new release folder and sync your files located in the
+configured ```dirToCopy``` folder and symlink it to the ```current``` folder in your ```deployTo``` directory.
+To finish your deployment it will remove the oldest release to be in line with the configured ```keepReleases``` setting.
 
 ### Rollback: shipit *your-server-env* rollback
 
-Run: ```shipit *your-server-env* rollback``` to rollback the latest Release.  
-This will also delete the Release Folder you are rolling back from.
+Run: ```shipit *your-server-env* rollback``` to rollback the latest release.
+This will also delete the release folder you are rolling back from.
 
 ### Events
 
-You can run Tasks on specific steps of the deployment process.
+You can run tasks on specific steps of the deployment process.
 
-- installed -> when dependencies are installed.
-- built -> when buildCommand has been executed.
-- uploaded -> when dirToCopy has been uploaded.
-- symlinked -> after the current symlink has been updated.
-- finished -> after the deploy is finished.
+Step | Description
+---------|----------
+ installed | when dependencies are installed.
+ built | when buildCommand has been executed.
+ uploaded | when dirToCopy has been uploaded.
+ symlinked | after the current symlink has been updated.
+ finished | after the deploy is finished.
 
 #### Example
 
@@ -101,7 +103,7 @@ module.exports = (shipit) => {
 
 ## Installation
 
-Install the Package with your favorite Packagemanager:
+Install the package with your favorite package manager:
 
 ```bash
 npm install --save-dev shipit-release

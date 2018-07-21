@@ -43,7 +43,7 @@ module.exports = function(shipit) {
   shipit.task('setup', async () => {
     extendShipit(shipit)
 
-    shipit.logInfo('Creating deployTo directory')
+    shipit.logInfo('Creating `deployTo` directory')
     await shipit.remote(`mkdir -p ${shipit.config.deployTo}`)
 
     shipit.logInfo('Creating releases directory')
@@ -73,7 +73,7 @@ module.exports = function(shipit) {
   shipit.blTask('deploy:build', async () => {
     extendShipit(shipit)
 
-    shipit.logInfo('Build App')
+    shipit.logInfo('Build app')
     await shipit.local(shipit.config.buildCommand)
 
     shipit.emit('built')
@@ -84,10 +84,10 @@ module.exports = function(shipit) {
 
     const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
 
-    shipit.logInfo(`Creating new Release directory "${shipit.deployTime}"`)
+    shipit.logInfo(`Creating new release directory "${shipit.deployTime}"`)
     await shipit.remote(`mkdir -p ${deployPath}`)
 
-    shipit.logInfo('Uploading new Release')
+    shipit.logInfo('Uploading new release')
     await shipit.copyToRemote(`${shipit.config.dirToCopy}/`, `${deployPath}/`)
 
     shipit.emit('uploaded')
@@ -98,7 +98,7 @@ module.exports = function(shipit) {
 
     const deployPath = path.join(shipit.releasesPath, shipit.deployTime)
 
-    shipit.logInfo('Updating current Symlink')
+    shipit.logInfo('Updating current symlink')
     await shipit.remote(`ln -nfs ${deployPath} ${shipit.currentPath}`)
 
     shipit.emit('symlinked')
@@ -126,18 +126,18 @@ module.exports = function(shipit) {
 
     const current = getCurrentRelease(await shipit.remote(`readlink ${shipit.currentPath}`))
     if (!current) {
-      shipit.logError('No Current Release - nothing to rollback')
+      shipit.logError('No current release - nothing to rollback')
       return null
     }
 
     const releases = computeReleases(await shipit.remote(`ls -r1 ${shipit.releasesPath}`))
     const previousRelease = releases.filter(item => item !== current)[0]
     if (!previousRelease) {
-      shipit.logError('No Previous Release - nothing to rollback')
+      shipit.logError('No previous release - nothing to rollback')
       return null
     }
 
-    shipit.logInfo('Rolling back to previous Release...')
+    shipit.logInfo('Rolling back to previous release...')
     await shipit.remote(`ln -nfs ${shipit.releasesPath}/${previousRelease} ${shipit.currentPath}`)
     await shipit.remote(`rm -rf ${shipit.releasesPath}/${current}`)
 
