@@ -7,11 +7,9 @@
     "airbnb-base"
   ],
   "plugins": [
-    "import",
-    "compat"
+    "import"
   ],
   "rules": {
-    "compat/compat": "error",
     "no-bitwise": "off",
     "import/no-extraneous-dependencies": "off",
     "no-underscore-dangle": "off",
