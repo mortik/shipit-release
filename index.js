@@ -141,6 +141,8 @@ module.exports = function(shipit) {
     await shipit.remote(`ln -nfs ${shipit.releasesPath}/${previousRelease} ${shipit.currentPath}`)
     await shipit.remote(`rm -rf ${shipit.releasesPath}/${current}`)
 
+    shipit.emit('finished')
+
     return shipit.logInfo(`Done. Rolled back to version ${previousRelease}`)
   })
 }

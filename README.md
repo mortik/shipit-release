@@ -71,7 +71,7 @@ This will also delete the release folder you are rolling back from.
 
 ### Events
 
-You can run tasks on specific steps of the deployment process.
+You can run tasks on specific steps of the deployment process:
 
 Step | Description
 ---------|----------
@@ -80,6 +80,13 @@ Step | Description
  uploaded | when dirToCopy has been uploaded.
  symlinked | after the current symlink has been updated.
  finished | after the deploy is finished.
+
+You can also run tasks once a rollback is finsihed:
+
+Step | Description
+---------|----------
+ finished | after the rollback is finished.
+
 
 #### Example
 
