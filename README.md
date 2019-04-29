@@ -1,5 +1,7 @@
 # Shipit-Release
 
+[![CircleCI](https://circleci.com/gh/mortik/shipit-release/tree/master.svg?style=svg)](https://circleci.com/gh/mortik/shipit-release/tree/master)
+
 A minimal deployment Plugin for ShipitJS
 
 ## Usage
@@ -7,8 +9,10 @@ A minimal deployment Plugin for ShipitJS
 To use shipit-release just require it in your shipit file and set the needed configuration variables:
 
 ```javascript
+const shipitRelease = require('shipit-release')
+
 module.exports = (shipit) => {
-  require('shipit-release')(shipit)
+  shipitRelease(shipit)
 
   shipit.initConfig({
     default: {
@@ -91,8 +95,10 @@ Step | Description
 #### Example
 
 ```javascript
+const shipitRelease = require('shipit-release')
+
 module.exports = (shipit) => {
-  require('shipit-release')(shipit)
+  shipitRelease(shipit)
 
   shipit.initConfig({
     ...
@@ -122,7 +128,6 @@ yarn add --dev shipit-release
 
 ## ToDos
 
-- Basic Test Setup
 - Basic Test Coverage
 - Setup Contribution Guidelines
 - Cleanup index.js

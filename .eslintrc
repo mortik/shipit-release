@@ -27,6 +27,7 @@
     "space-before-function-paren": 0
   },
   "env": {
-    "node": true
+    "node": true,
+    "mocha": true
   }
 }
