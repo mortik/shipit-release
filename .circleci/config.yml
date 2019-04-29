@@ -59,12 +59,14 @@ jobs:
           at: ~/app
       - run: npm test
 
-  # deploy:
-  #   <<: *defaults
-  #   steps:
-  #     - attach_workspace:
-  #         at: ~/app
-  #     - run: foo
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run: npm run release -- --prerelease pre
+      - run: git push --follow-tags origin master
+      - run: npm publish --tag pre
 
 workflows:
   version: 2

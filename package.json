@@ -1,6 +1,6 @@
 {
   "name": "shipit-release",
-  "version": "1.2.4",
+  "version": "2.0.0-pre.2",
   "homepage": "https://github.com/mortik/shipit-release#readme",
   "repository": {
     "type": "git",
@@ -16,7 +16,8 @@
     "lint:fix": "eslint --ext .js --fix .",
     "lint": "eslint --ext .js .",
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter spec",
+    "release": "standard-version"
   },
   "author": "Marten Klitzke <me@mortik.xyz>",
   "license": "MIT",
@@ -30,7 +31,8 @@
     "mocha": "6.1.4",
     "shipit-cli": "4.2.0",
     "sinon": "7.3.2",
-    "sinon-chai": "3.3.0"
+    "sinon-chai": "3.3.0",
+    "standard-version": "^5.0.2"
   },
   "dependencies": {
     "path2": "0.1.0",
