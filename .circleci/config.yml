@@ -1,0 +1,114 @@
+version: 2.0
+
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: node/lts-alpine
+
+jobs:
+  checkout-code:
+    <<: *defaults
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - ./
+      - save_cache:
+          key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - ~/app
+
+  npm:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - restore_cache:
+          keys:
+            - v1-npm-{{ checksum "package-lock.json" }}
+            - v1-npm-
+      - run: npm ci
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - node_modules
+      - save_cache:
+          key: v1-npm-{{ checksum "package-lock.json" }}
+          paths:
+            - ~/app/node_modules
+
+  audit:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run: npm audit
+
+  lint:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run: npm run lint
+
+  tests:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/app
+      - run: npm test
+
+  # deploy:
+  #   <<: *defaults
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/app
+  #     - run: foo
+
+workflows:
+  version: 2
+  check:
+    triggers:
+      - schedule:
+          cron: "0 20 * * *"
+          filters:
+            branches:
+              only: master
+    jobs:
+      - checkout-code
+      - npm:
+          requires:
+            - checkout-code
+      - audit:
+          requires:
+            - npm
+      - lint:
+          requires:
+            - npm
+      - tests:
+          requires:
+            - npm
+  main:
+    jobs:
+      - checkout-code
+      - npm:
+          requires:
+            - checkout-code
+      - audit:
+          requires:
+            - npm
+      - lint:
+          requires:
+            - npm
+      - tests:
+          requires:
+            - npm
+      # - deploy:
+      #     requires:
+      #       - audit
+      #       - lint
+      #       - tests
+      #     filters:
+      #       branches:
+      #         only: master

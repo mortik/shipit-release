@@ -15,6 +15,9 @@ function getDeployTime() {
 }
 
 function extendShipit(shipit) {
+  /* eslint-disable-next-line no-param-reassign */
+  shipit.config = shipit.config || {}
+
   const config = {
     keepReleases: 5,
     deployTo: '',
@@ -23,7 +26,8 @@ function extendShipit(shipit) {
     buildCommand: 'npm run build',
     ...shipit.config,
   }
-  Object.assign(shipit.config, config)
+
+  Object.assign(shipit.config || {}, config)
 
   /* eslint-disable no-param-reassign */
   shipit.currentPath = path.join(shipit.config.deployTo, 'current')
@@ -40,6 +44,8 @@ function extendShipit(shipit) {
 
 /* eslint-disable func-names */
 module.exports = function(shipit) {
+  extendShipit(shipit)
+
   shipit.task('setup', async () => {
     extendShipit(shipit)
 
