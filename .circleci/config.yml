@@ -71,7 +71,7 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - "a4:a1:a7:a9:54:bc:b4:37:db:73:92:04:bc:57:f3:b2"
-      - run: npm run release -- --prerelease pre --no-verify
+      - run: npm run release -- --prerelease pre --no-verify --skip.changelog=true
       - run: git push --follow-tags origin master
       - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > ~/app/.npmrc
       - run: npm publish --tag pre
