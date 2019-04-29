@@ -64,6 +64,8 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
+      - run: git config --global user.email "me@mortik.xyz"
+      - run: git config --global user.name "Marten Klitzke"
       - add_ssh_keys:
           fingerprints:
             - "a4:a1:a7:a9:54:bc:b4:37:db:73:92:04:bc:57:f3:b2"
