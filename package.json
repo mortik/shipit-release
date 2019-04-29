@@ -25,6 +25,6 @@
   },
   "dependencies": {
     "path2": "^0.1.0",
-    "shipit-utils": "^1.4.0"
+    "shipit-utils": "^1.4.1"
   }
 }
