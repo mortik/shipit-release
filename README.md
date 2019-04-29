@@ -1,6 +1,6 @@
 # Shipit-Release
 
-[![CircleCI](https://circleci.com/gh/mortik/shipit-release/tree/master.svg?style=svg)](https://circleci.com/gh/mortik/shipit-release/tree/master)
+[![CircleCI](https://img.shields.io/circleci/project/github/mortik/shipit-release.svg?logo=appveyor&style=popout-square)](https://circleci.com/gh/mortik/shipit-release)
 
 A minimal deployment Plugin for ShipitJS
 
