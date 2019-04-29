@@ -66,6 +66,7 @@ jobs:
           at: ~/app
       - run: git config --global user.email "me@mortik.xyz"
       - run: git config --global user.name "Marten Klitzke"
+      - run: mkdir -p ~/.ssh
       - run: ssh-keyscan -H github.com >> ~/.ssh/known_hosts
       - add_ssh_keys:
           fingerprints:
