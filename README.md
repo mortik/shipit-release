@@ -1,5 +1,7 @@
 # Shipit-Release
 
+[![CircleCI](https://circleci.com/gh/mortik/shipit-release/tree/master.svg?style=svg)](https://circleci.com/gh/mortik/shipit-release/tree/master)
+
 A minimal deployment Plugin for ShipitJS
 
 ## Usage
@@ -126,7 +128,6 @@ yarn add --dev shipit-release
 
 ## ToDos
 
-- Basic Test Setup
 - Basic Test Coverage
 - Setup Contribution Guidelines
 - Cleanup index.js

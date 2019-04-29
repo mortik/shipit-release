@@ -3,7 +3,7 @@ version: 2.0
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: node/lts-alpine
+    - image: circleci/node
 
 jobs:
   checkout-code:
