@@ -31,7 +31,7 @@
     "mocha": "6.2.2",
     "shipit-cli": "4.2.0",
     "sinon": "7.5.0",
-    "sinon-chai": "3.3.0",
+    "sinon-chai": "3.4.0",
     "standard-version": "^7.0.1"
   },
   "dependencies": {
