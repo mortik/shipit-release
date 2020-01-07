@@ -30,7 +30,7 @@
     "eslint-plugin-import": "2.19.1",
     "mocha": "6.2.2",
     "shipit-cli": "4.2.0",
-    "sinon": "7.5.0",
+    "sinon": "8.0.4",
     "sinon-chai": "3.3.0",
     "standard-version": "^7.0.1"
   },
