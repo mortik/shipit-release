@@ -12,7 +12,7 @@
     "test": "test"
   },
   "scripts": {
-    "precommit": "npm run lint:fix",
+    "precommit": "yarn lint:fix",
     "lint:fix": "eslint --ext .js --fix .",
     "lint": "eslint --ext .js .",
     "commitmsg": "commitlint -e $GIT_PARAMS",
@@ -33,6 +33,9 @@
     "sinon": "7.5.0",
     "sinon-chai": "3.5.0",
     "standard-version": "^7.0.1"
+  },
+  "resolutions": {
+    "minimist": ">=1.2.3"
   },
   "dependencies": {
     "path2": "0.1.0",
