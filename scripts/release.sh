@@ -2,8 +2,8 @@
 
 set -eu
 
-npm run release -- --prerelease pre --no-verify --skip.changelog=true --message "chore(release): %s [skip ci]"
+yarn release -- --prerelease pre --no-verify --skip.changelog=true --message "chore(release): %s [skip ci]"
 
 git push --follow-tags origin master
 
-npm publish --tag pre
+yarn publish --tag pre
