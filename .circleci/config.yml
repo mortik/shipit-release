@@ -19,22 +19,22 @@ jobs:
           paths:
             - ~/app
 
-  npm:
+  yarn:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/app
       - restore_cache:
           keys:
-            - v1-npm-{{ checksum "package-lock.json" }}
-            - v1-npm-
-      - run: npm ci
+            - v1-yarn-{{ checksum "yarn.lock" }}
+            - v1-yarn-
+      - run: yarn --frozen-lockfile
       - persist_to_workspace:
           root: ~/app
           paths:
             - node_modules
       - save_cache:
-          key: v1-npm-{{ checksum "package-lock.json" }}
+          key: v1-yarn-{{ checksum "yarn.lock" }}
           paths:
             - ~/app/node_modules
 
@@ -43,21 +43,21 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/app
-      - run: npm audit
+      - run: yarn audit
 
   lint:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/app
-      - run: npm run lint
+      - run: yarn lint
 
   tests:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/app
-      - run: npm test
+      - run: yarn test
 
   deploy:
     <<: *defaults
@@ -85,33 +85,33 @@ workflows:
               only: master
     jobs:
       - checkout-code
-      - npm:
+      - yarn:
           requires:
             - checkout-code
       - audit:
           requires:
-            - npm
+            - yarn
       - lint:
           requires:
-            - npm
+            - yarn
       - tests:
           requires:
-            - npm
+            - yarn
   main:
     jobs:
       - checkout-code
-      - npm:
+      - yarn:
           requires:
             - checkout-code
       - audit:
           requires:
-            - npm
+            - yarn
       - lint:
           requires:
-            - npm
+            - yarn
       - tests:
           requires:
-            - npm
+            - yarn
       - deploy:
           requires:
             - audit
