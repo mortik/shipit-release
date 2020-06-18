@@ -82,7 +82,7 @@ workflows:
           cron: "0 20 * * *"
           filters:
             branches:
-              only: master
+              only: main
     jobs:
       - checkout-code
       - yarn:
@@ -119,4 +119,4 @@ workflows:
             - tests
           filters:
             branches:
-              only: master
+              only: main

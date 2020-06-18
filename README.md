@@ -134,4 +134,4 @@ yarn add --dev shipit-release
 
 ## License
 
-The node module is available as open source under the terms of the [MIT License](https://github.com/mortik/shipit-release/blob/master/LICENSE).
+The node module is available as open source under the terms of the [MIT License](https://github.com/mortik/shipit-release/blob/main/LICENSE).
