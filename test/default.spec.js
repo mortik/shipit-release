@@ -2,7 +2,7 @@ const sinon = require('sinon')
 const chai = require('chai')
 const sinonChai = require('sinon-chai')
 const Shipit = require('shipit-cli')
-const shipitRelease = require('../')
+const shipitRelease = require('..')
 
 const { expect } = chai
 chai.use(sinonChai)

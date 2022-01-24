@@ -2,11 +2,11 @@ const path = require('path2/posix')
 const utils = require('shipit-utils')
 
 function getCurrentRelease(result) {
-  return result.map(item => item.stdout.replace(/\n$/, '').split('/').pop())[0]
+  return result.map((item) => item.stdout.replace(/\n$/, '').split('/').pop())[0]
 }
 
 function computeReleases(result) {
-  const releases = result.map(item => item.stdout.replace(/\n$/, '').split('/').pop().split('\n'))
+  const releases = result.map((item) => item.stdout.replace(/\n$/, '').split('/').pop().split('\n'))
   return [].concat(...releases)
 }
 
@@ -43,7 +43,7 @@ function extendShipit(shipit) {
 }
 
 /* eslint-disable func-names */
-module.exports = function(shipit) {
+module.exports = function (shipit) {
   extendShipit(shipit)
 
   shipit.task('setup', async () => {
@@ -113,7 +113,9 @@ module.exports = function(shipit) {
   shipit.blTask('deploy:cleanup', async () => {
     extendShipit(shipit)
 
-    shipit.logInfo(`Keeping "${shipit.config.keepReleases}" last releases, cleaning others`)
+    shipit.logInfo(
+      `Keeping "${shipit.config.keepReleases}" last releases, cleaning others`,
+    )
 
     const command = `(ls -rd ${shipit.releasesPath}/*|head -n ${shipit.config.keepReleases};ls -d ${shipit.releasesPath}/*)|sort|uniq -u|xargs rm -rf`
     await shipit.remote(command)
@@ -130,21 +132,27 @@ module.exports = function(shipit) {
   shipit.task('rollback', async () => {
     extendShipit(shipit)
 
-    const current = getCurrentRelease(await shipit.remote(`readlink ${shipit.currentPath}`))
+    const current = getCurrentRelease(
+      await shipit.remote(`readlink ${shipit.currentPath}`),
+    )
     if (!current) {
       shipit.logError('No current release - nothing to rollback')
       return null
     }
 
-    const releases = computeReleases(await shipit.remote(`ls -r1 ${shipit.releasesPath}`))
-    const previousRelease = releases.filter(item => item !== current)[0]
+    const releases = computeReleases(
+      await shipit.remote(`ls -r1 ${shipit.releasesPath}`),
+    )
+    const previousRelease = releases.filter((item) => item !== current)[0]
     if (!previousRelease) {
       shipit.logError('No previous release - nothing to rollback')
       return null
     }
 
     shipit.logInfo('Rolling back to previous release...')
-    await shipit.remote(`ln -nfs ${shipit.releasesPath}/${previousRelease} ${shipit.currentPath}`)
+    await shipit.remote(
+      `ln -nfs ${shipit.releasesPath}/${previousRelease} ${shipit.currentPath}`,
+    )
     await shipit.remote(`rm -rf ${shipit.releasesPath}/${current}`)
 
     shipit.emit('finished')
